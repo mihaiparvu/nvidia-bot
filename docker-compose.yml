@@ -10,4 +10,4 @@ services:
       LANG: "C.UTF"
     volumes:
       - ~/docker/nvidia-bot/:/home/
-    restart: unless-stopped
+    restart: on-failure
