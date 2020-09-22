@@ -1,3 +1,4 @@
+
 FROM ubuntu:18.04
 
 # install chromium
@@ -11,9 +12,7 @@ RUN unzip *.zip chromedriver -d /usr/local/bin/
 
 # install pip
 RUN apt-get install -yqq python3-pip
-RUN pip3 install pipenv
-RUN pipenv shell
-RUN pipenv install
+RUN pip3 install -r requirements.txt
 
 WORKDIR /home
 

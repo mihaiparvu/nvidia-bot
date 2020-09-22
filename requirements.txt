@@ -1,0 +1,10 @@
+requests
+click
+selenium
+furl
+twilio
+discord-webhook
+pycryptodome
+questionary
+spinlog
+slackclient
