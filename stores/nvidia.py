@@ -243,7 +243,6 @@ class NvidiaBuyer:
         self.notification_handler = NotificationHandler()
 
         log.info("Opening Webdriver")
-        chrome_options.headless = True
         self.driver = webdriver.Chrome(options=options, chrome_options=chrome_options)
         self.sign_in()
         selenium_utils.add_cookies_to_session_from_driver(self.driver, self.session)

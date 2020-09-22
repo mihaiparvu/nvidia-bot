@@ -1,0 +1,13 @@
+version: "3"
+services:
+  nvidia_bot:
+    container_name: nvidia_bot
+    hostname: nvidia_bot
+    image: nvidia-bot
+    environment:
+      TZ: "Europe/Bucharest"
+      LC_ALL: "C.UTF-8"
+      LANG: "C.UTF"
+    volumes:
+      - ~/docker/nvidia-bot/:/home/
+    restart: unless-stopped

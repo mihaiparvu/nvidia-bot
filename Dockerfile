@@ -7,7 +7,7 @@ RUN  apt-get update \
 
 # install chromedriver
 RUN apt-get install -yqq unzip wget
-RUN wget https://github.com/electron/electron/releases/download/v9.0.0-beta.15/chromedriver-v9.0.0-beta.15-linux-armv7l.zip
+RUN wget https://github.com/electron/electron/releases/download/v10.1.2/chromedriver-v10.1.2-linux-armv7l.zip
 RUN unzip *.zip chromedriver -d /usr/local/bin/
 
 # install pip
