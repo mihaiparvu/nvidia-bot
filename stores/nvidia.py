@@ -15,7 +15,6 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.ui import WebDriverWait
-from spinlog import Spinner
 
 from notifications.notifications import NotificationHandler
 from utils import selenium_utils
@@ -342,10 +341,10 @@ class NvidiaBuyer:
             while not self.add_to_cart(product_id) and self.enabled:
                 self.attempt = self.attempt + 1
                 time_delta = str(datetime.now() - self.started_at).split(".")[0]
-                with Spinner.get(
+                print(
                     f"Still working (attempt {self.attempt}, have been running for {time_delta})..."
-                ) as s:
-                    sleep(delay)
+                )
+                sleep(delay)
             if self.enabled:
                 self.apply_shopper_details()
                 if self.auto_buy_enabled:
