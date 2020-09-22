@@ -7,7 +7,6 @@ from os import path
 from time import sleep
 
 import requests
-from chromedriver_py import binary_path  # this will get you the path variable
 from furl import furl
 from requests.exceptions import Timeout
 from requests.packages.urllib3.util.retry import Retry
@@ -244,9 +243,8 @@ class NvidiaBuyer:
         self.notification_handler = NotificationHandler()
 
         log.info("Opening Webdriver")
-        self.driver = webdriver.Chrome(
-            executable_path=binary_path, options=options, chrome_options=chrome_options
-        )
+        chrome_options.headless = True
+        self.driver = webdriver.Chrome(options=options, chrome_options=chrome_options)
         self.sign_in()
         selenium_utils.add_cookies_to_session_from_driver(self.driver, self.session)
         log.info("Adding driver cookies to session")
@@ -391,16 +389,7 @@ class NvidiaBuyer:
         log.debug(f"Clicking on button: {autobuy_btns[0]}")
         self.driver.find_element_by_xpath(f'//*[@value="{autobuy_btns[0]}"]').click()
 
-        try:
-            log.debug(
-                f"Waiting for page title: {PAGE_TITLES_BY_LOCALE[self.locale]['verify_order']}"
-            )
-            selenium_utils.wait_for_page(
-                self.driver, PAGE_TITLES_BY_LOCALE[self.locale]["verify_order"], 5
-            )
-        except TimeoutException:
-            log.debug("Address validation required?")
-            self.address_validation_page()
+        self.address_validation_page()
 
         log.debug(
             f"Waiting for page title: {PAGE_TITLES_BY_LOCALE[self.locale]['verify_order']}"
