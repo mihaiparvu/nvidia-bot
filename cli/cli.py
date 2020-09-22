@@ -1,6 +1,5 @@
 import click
 
-from cli.utils import QuestionaryOption
 from stores.nvidia import NvidiaBuyer, GPU_DISPLAY_NAMES, ACCEPTED_LOCALES
 
 
@@ -11,16 +10,10 @@ def main():
 
 @click.command()
 @click.option(
-    "--gpu",
-    type=click.Choice(GPU_DISPLAY_NAMES, case_sensitive=False),
-    prompt="What GPU are you after?",
-    cls=QuestionaryOption,
+    "--gpu"
 )
 @click.option(
-    "--locale",
-    type=click.Choice(ACCEPTED_LOCALES, case_sensitive=False),
-    prompt="What locale shall we use?",
-    cls=QuestionaryOption,
+    "--locale"
 )
 def nvidia(gpu, locale):
     nv = NvidiaBuyer(gpu, locale)
