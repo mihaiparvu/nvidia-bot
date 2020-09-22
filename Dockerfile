@@ -12,7 +12,7 @@ RUN unzip *.zip chromedriver -d /usr/local/bin/
 
 # install pip
 RUN apt-get install -yqq python3-pip
-RUN pip3 install -r requirements.txt
+RUN pip3 install requests click selenium furl questionary spinlog
 
 WORKDIR /home
 
