@@ -20,7 +20,7 @@ from notifications.notifications import NotificationHandler
 from utils import selenium_utils
 from utils.http import TimeoutHTTPAdapter
 from utils.logger import log
-from utils.selenium_utils import options, chrome_options
+from utils.selenium_utils import options, enable_headless
 
 DIGITAL_RIVER_OUT_OF_STOCK_MESSAGE = "PRODUCT_INVENTORY_OUT_OF_STOCK"
 DIGITAL_RIVER_API_KEY = "9485fa7b159e42edb08a83bde0d83dia"
@@ -196,7 +196,7 @@ class InvalidAutoBuyConfigException(Exception):
 
 
 class NvidiaBuyer:
-    def __init__(self, gpu, locale="en_us"):
+    def __init__(self, gpu, locale="en_us", test=False, headless=False):
         self.product_ids = set([])
         self.cli_locale = locale.lower()
         self.locale = self.map_locales()
@@ -206,6 +206,7 @@ class NvidiaBuyer:
         self.auto_buy_enabled = False
         self.attempt = 0
         self.started_at = datetime.now()
+        self.test = test
 
         self.gpu_long_name = GPU_DISPLAY_NAMES[gpu]
 
@@ -221,7 +222,7 @@ class NvidiaBuyer:
                     self.nvidia_password = self.config["NVIDIA_PASSWORD"]
                     self.auto_buy_enabled = self.config["FULL_AUTOBUY"]
                     self.cvv = self.config.get("CVV")
-                    self.interval=int(self.config.get("INTERVAL", 5))
+                    self.interval = int(self.config.get("INTERVAL", 5))
                 else:
                     raise InvalidAutoBuyConfigException(self.config)
         else:
@@ -244,8 +245,9 @@ class NvidiaBuyer:
         self.notification_handler = NotificationHandler()
 
         log.info("Opening Webdriver")
-
-        self.driver = webdriver.Chrome(options=options, chrome_options=chrome_options)
+        if headless:
+            enable_headless()
+        self.driver = webdriver.Chrome(options=options)
         self.sign_in()
         selenium_utils.add_cookies_to_session_from_driver(self.driver, self.session)
         log.info("Adding driver cookies to session")
@@ -340,7 +342,9 @@ class NvidiaBuyer:
 
     def buy(self, product_id):
         try:
-            log.info(f"Checking stock for {product_id} at {self.interval} second intervals.")
+            log.info(
+                f"Checking stock for {product_id} at {self.interval} second intervals."
+            )
             while not self.add_to_cart(product_id) and self.enabled:
                 self.attempt = self.attempt + 1
                 time_delta = str(datetime.now() - self.started_at).split(".")[0]
@@ -407,8 +411,11 @@ class NvidiaBuyer:
             self.driver, PAGE_TITLES_BY_LOCALE[self.locale]["verify_order"], 5
         )
 
-        log.info("F this captcha lmao. Submitting cart.")
-        self.submit_cart()
+        if not self.test:
+            log.info("F this captcha lmao. Submitting cart.")
+            self.submit_cart()
+        else:
+            log.info("Test complete. No actual purchase was made.")
         # log.info("Submit.")
         # log.debug("Reached order validation page.")
         # self.driver.save_screenshot("nvidia-order-validation.png")

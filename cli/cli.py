@@ -15,8 +15,10 @@ def main():
 @click.option(
     "--locale"
 )
-def nvidia(gpu, locale):
-    nv = NvidiaBuyer(gpu, locale)
+@click.option("--test", is_flag=True)
+@click.option("--headless", is_flag=True)
+def nvidia(gpu, locale, test, headless):
+    nv = NvidiaBuyer(gpu, locale, test, headless)
     nv.run_items()
 
 
