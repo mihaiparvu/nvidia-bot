@@ -1,6 +1,6 @@
 import click
 
-from stores.nvidia import NvidiaBuyer, GPU_DISPLAY_NAMES, ACCEPTED_LOCALES
+from stores.nvidia import NvidiaBuyer
 
 
 @click.group()
