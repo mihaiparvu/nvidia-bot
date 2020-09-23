@@ -15,4 +15,4 @@ RUN pip3 install requests click selenium furl
 
 WORKDIR /home
 
-CMD ["python3", "-u", "app.py", "nvidia", "--gpu", "3080", "--locale", "de_de"]
+CMD ["python3", "-u", "app.py", "nvidia", "--gpu", "3080", "--locale", "de_de", "--headless"]
